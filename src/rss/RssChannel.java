@@ -16,12 +16,15 @@ public class RssChannel {
     private Image image = null;
     private List<ChannelItem> items = new ArrayList<ChannelItem>();
 
-    public RssChannel( String link, Date lastBuildDate )
-    {
+
+    public RssChannel setLink(String link) {
         this.link = link;
+        return this;
+    }
+
+    public RssChannel setLastBuildDate(Date lastBuildDate) {
         this.lastBuildDate = lastBuildDate;
-        //a bit of lambda
-        //Runnable r2 = () -> System.out.println("Hello world two!");
+        return this;
     }
 
     public String getTitle()
@@ -29,9 +32,9 @@ public class RssChannel {
         return title;
     }
 
-    public void setTitle( String title )
-    {
+    public RssChannel setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public String getLink()
@@ -44,9 +47,10 @@ public class RssChannel {
         return description;
     }
 
-    public void setDescription( String description )
+    public RssChannel setDescription( String description )
     {
         this.description = description;
+        return this;
     }
 
     public Date getLastBuildDate()
@@ -57,6 +61,11 @@ public class RssChannel {
     public List<ChannelItem> getItems()
     {
         return items;
+    }
+
+    public RssChannel setItems(List<ChannelItem> items) {
+        this.items = items;
+        return this;
     }
 
     public Image getImage()
