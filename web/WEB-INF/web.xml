@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>rssServlet</servlet-name>
-        <servlet-class>RssServlet</servlet-class>
+        <servlet-class>servlets.RssServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
