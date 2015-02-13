@@ -13,7 +13,7 @@ public class RssBuilder {
 
     protected static final String XML_TITLE_TAG = "title";
     protected static final String XML_ITEM_TAG = "item";
-    protected static final String XML_IMAGE_TAG = "image";
+    protected static final String XML_ENCLOSURE_TAG = "enclosure";
     protected static final String XML_LINK_TAG = "link";
     protected static final String XML_DESCRIPTION_TAG = "description";
 
@@ -24,8 +24,7 @@ public class RssBuilder {
     protected static final String XML_LAST_BUILD_DATE_TAG = "lastBuildDate";
     private static final String XML_TYPE_TAG = "type";
     protected static final String XML_URL_TAG = "url";
-    private static final String XML_HEIGHT_TAG = "height";
-    private static final String XML_WIDTH_TAG = "width";
+    private static final String XML_LENGTH_TAG = "length";
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat( "EEE, d MMM yyyy HH:mm:ss Z" );
 
@@ -62,10 +61,6 @@ public class RssBuilder {
         addTag(XML_DESCRIPTION_TAG, channel.getDescription());
         String date = getDateStr(channel.getLastBuildDate());
         addTag(XML_LAST_BUILD_DATE_TAG, date);
-        Image image = channel.getImage();
-        if (image != null) {
-            printImage(image);
-        }
         for (ChannelItem channelItem : channel.getItems()) {
             printRssChannelItem(channelItem);
         }
@@ -78,6 +73,10 @@ public class RssBuilder {
     }
 
     protected void printRssChannelItemBody(ChannelItem item) {
+        Enclosure enclosure = item.getEnclosure();
+        if(enclosure != null){
+            printEnclosure(enclosure);
+        }
         for (ChannelItemField field : item.getFields()) {
             addTag(field.getName(), field.getValue());
         }
@@ -130,15 +129,11 @@ public class RssBuilder {
         print("\n");
     }
 
-    protected void printImage(Image image) {
-        openTag(XML_IMAGE_TAG);
-        String type = image.getType();
-        if (type != null) {
-            addTag(XML_TYPE_TAG, type);
-        }
+    protected void printEnclosure(Enclosure image) {
+        openTag(XML_ENCLOSURE_TAG);
+        addTag(XML_TYPE_TAG, image.getType());
         addTag(XML_URL_TAG, image.getUrl());
-        addTag(XML_HEIGHT_TAG, "" + image.getHeight());
-        addTag(XML_WIDTH_TAG, "" + image.getWidth());
-        closeTag(XML_IMAGE_TAG);
+        addTag(XML_LENGTH_TAG, "" + image.getLength());
+        closeTag(XML_ENCLOSURE_TAG);
     }
 }

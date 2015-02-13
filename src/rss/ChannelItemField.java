@@ -7,6 +7,10 @@ public class ChannelItemField {
     private String name;
     private String value;
 
+    public ChannelItemField(String name, String value){
+        this.name = name;
+        this.value = value;
+    }
     public String getName() {
         return name;
     }

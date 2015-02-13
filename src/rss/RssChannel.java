@@ -13,7 +13,6 @@ public class RssChannel {
 
     private String title = "";
     private String description = "";
-    private Image image = null;
     private List<ChannelItem> items = new ArrayList<ChannelItem>();
 
 
@@ -66,10 +65,5 @@ public class RssChannel {
     public RssChannel setItems(List<ChannelItem> items) {
         this.items = items;
         return this;
-    }
-
-    public Image getImage()
-    {
-        return image;
     }
 }
