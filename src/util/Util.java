@@ -4,6 +4,7 @@ import rss.HtmlParser;
 import rss.RssBuilder;
 import rss.RssChannel;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
@@ -26,8 +27,8 @@ public class Util {
             ByteArrayOutputStream stream = getRssOutputStream(builder);
             response.setContentLength(stream.size());
             response.setContentType("text/xml;charset=utf-8");
-            PrintWriter writer = response.getWriter();
-            writer.write(stream.toString());
+            ServletOutputStream writer = response.getOutputStream();
+            writer.write(stream.toByteArray());
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
