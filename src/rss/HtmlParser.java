@@ -18,7 +18,8 @@ import java.util.List;
 public class HtmlParser {
     Document doc;
     RssChannel channel;
-    int maxTitleLength = 97;
+    static final int  MAX_TITLE_LENGTH = 97;
+
     public HtmlParser(String url){
         try {
             doc = Jsoup.connect(url).get();
@@ -37,12 +38,12 @@ public class HtmlParser {
         channel.setDescription(descriptions.isEmpty() ? "RSS feed for ".concat(title) : descriptions.first().text());
 
         Elements posts = doc.select("div[class~=.*([P|p]ost)(?!s).*]");
+        if(posts.size() > 1){
+            posts = posts.first().parent().select(">div[class~=.*([P|p]ost)(?!s).*]");
+        }
         if (!posts.isEmpty()) {
-            Element firstItem = posts.first();
-            Elements allItems = firstItem.siblingElements();
-            allItems.add(firstItem);
             List<ChannelItem> items = new ArrayList<>();
-            for (Element elem : allItems) {
+            for (Element elem : posts) {
                 ChannelItem item = new ChannelItem();
                 findItemComments(item, elem);
                 findItemAuthor(item, elem);
@@ -60,23 +61,28 @@ public class HtmlParser {
     }
 
     private String firstTextNode(Element elem){
-        if(elem.textNodes().isEmpty()) return "fuck";
+        if(elem.textNodes().isEmpty()) return "";
         return elem.textNodes().get(0).text();
     }
 
     private void findItemComments(ChannelItem item, Element elem){
-        Elements comments = findElements(elem, "[class~=.*comment.*]",
+        Elements comments = findElements(elem, "[class*=comment]",
                 "a[text~=.*(([A|a]nswer)|([C|c]omment)|([К|к]оммент)|([О|о]тзыв)|([О|о]твет)).*]");
         processElements(comments, item, "comments", findLink(comments));
     }
 
     private void findItemPubDate(ChannelItem item, Element elem) {
         Elements dates = elem.select("[class~=.*((date)|(time)).*]");
-        processElements(dates, item, "pubDate", dates.text());
+        if(dates.size() > 1) {
+            dates = dates.first().parent().select(">[class~=.*((date)|(time)).*]");
+        }
+        if(!dates.isEmpty()){
+            addFieldToItem(item, "pubDate", dates.text());
+        }
     }
 
     private void findItemAuthor(ChannelItem item, Element elem) {
-        Elements authors = findElements(elem, "[class~=.*author.*]", "a[rel=author]");
+        Elements authors = findElements(elem, "[class*=author]", "a[rel=author]");
         processElements(authors, item, "author", findLink(authors));
     }
 
@@ -146,8 +152,8 @@ public class HtmlParser {
     }
 
     private String titleString(String text){
-        if(text.length() > maxTitleLength){
-            text = text.substring(0, maxTitleLength).concat("...");
+        if(text.length() > MAX_TITLE_LENGTH){
+            text = text.substring(0, MAX_TITLE_LENGTH).concat("...");
         }
         return text;
     }
