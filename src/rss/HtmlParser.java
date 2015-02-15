@@ -48,7 +48,8 @@ public class HtmlParser {
                 findItemComments(item, elem);
                 findItemAuthor(item, elem);
                 findItemPubDate(item, elem);
-                elem.select("[class~=.*(meta).*]").remove();
+                elem.select("[class*=meta]").remove();
+                elem.select("[class~=.*((date)|(time)).*]").remove();
                 findItemTitle(item, elem);
                 findItemDescription(item, elem);
                 findItemEnclosure(item, elem);
