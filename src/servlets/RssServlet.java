@@ -12,10 +12,12 @@ import java.io.IOException;
  */
 public class RssServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("POST " + request.getRemoteAddr());
         Util.getXml(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("GET " + request.getRemoteAddr());
         Util.getXml(request, response);
     }
 }

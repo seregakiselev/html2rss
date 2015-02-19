@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="com.sun.xml.ws:webservices-rt:2.1-b15" type="repository">
+    <properties maven-id="com.sun.xml.ws:webservices-rt:2.1-b15" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/webservices-rt-2.1-b15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/webservices-api-2.1-b15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/activation-1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -19,12 +19,8 @@ public class Util {
     public static void getXml(HttpServletRequest request, HttpServletResponse response) {
         try {
             String link = Misc.norm(request.getParameter("pageUrl"));
-            HtmlParser parser = new HtmlParser(link);
-            RssBuilder builder = new RssBuilder();
-            RssChannel channel = parser.parse();
-            channel.setLink(link).setLastBuildDate(new Date(System.currentTimeMillis()));
-            builder.setRssChannel(channel);
-            ByteArrayOutputStream stream = getRssOutputStream(builder);
+            String body = getRssBody(link);
+            ByteArrayOutputStream stream = getRssOutputStream(body);
             response.setContentLength(stream.size());
             response.setContentType("text/xml;charset=utf-8");
             ServletOutputStream writer = response.getOutputStream();
@@ -35,9 +31,16 @@ public class Util {
         }
     }
 
-    protected static ByteArrayOutputStream getRssOutputStream(RssBuilder builder)
-            throws IOException {
-        String body = builder.buildRss();
+    public static String getRssBody(String link) {
+        HtmlParser parser = new HtmlParser(link);
+        RssBuilder builder = new RssBuilder();
+        RssChannel channel = parser.parse();
+        channel.setLink(link).setLastBuildDate(new Date(System.currentTimeMillis()));
+        builder.setRssChannel(channel);
+        return builder.buildRss();
+    }
+
+    protected static ByteArrayOutputStream getRssOutputStream(String body) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         stream.write(body.getBytes("UTF-8"));
         stream.flush();
